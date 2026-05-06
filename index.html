@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Relancio — Gestion intelligente des relances B2B</title>
+<meta name="description" content="Récupérez vos factures impayées automatiquement. Relancio détecte les retards, rédige les relances par IA et adapte le ton selon votre client."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#16a34a;--green-light:#dcfce7;--green-dark:#14532d;--green-mid:#22c55e;
+  --slate:#0f172a;--slate-mid:#1e293b;--white:#ffffff;
+  --amber:#d97706;--red:#dc2626;--blue:#2563eb;
+  --gray-200:#e2e8f0;--gray-400:#94a3b8;
+  --font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace;
+  --radius:10px;--radius-lg:16px;--radius-xl:24px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--slate);color:var(--white);-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 48px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;z-index:100;background:rgba(15,23,42,.92);backdrop-filter:blur(12px)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:18px;height:18px}
+.logo-text{font-size:16px;font-weight:700;letter-spacing:-.4px}
+.nav-links{display:flex;gap:28px}
+.nav-links a{color:rgba(255,255,255,.6);font-size:14px;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-ctas{display:flex;gap:10px}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:8px 18px;border-radius:var(--radius);font-size:13.5px;cursor:pointer;font-family:var(--font);transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-ghost:hover{border-color:var(--green-mid);color:var(--white)}
+.btn-primary{background:var(--green);border:none;color:var(--white);padding:9px 20px;border-radius:var(--radius);font-size:13.5px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-primary:hover{background:var(--green-mid);transform:translateY(-1px)}
+
+/* HERO */
+.hero{padding:90px 48px 80px;max-width:1100px;margin:0 auto;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500;color:var(--green-mid);margin-bottom:28px;letter-spacing:.3px}
+.pulse{width:6px;height:6px;background:var(--green-mid);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(36px,5vw,64px);font-weight:700;line-height:1.08;letter-spacing:-2px;margin-bottom:22px}
+.hero h1 span{color:var(--green-mid)}
+.hero p{font-size:18px;color:rgba(255,255,255,.55);max-width:560px;margin:0 auto 40px;line-height:1.7;font-weight:300}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+.btn-hero{background:var(--green);color:var(--white);border:none;padding:15px 34px;border-radius:var(--radius-lg);font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .25s;text-decoration:none}
+.btn-hero:hover{background:var(--green-mid);transform:translateY(-2px);box-shadow:0 8px 25px rgba(34,197,94,.3)}
+.btn-hero-outline{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,.2);padding:14px 28px;border-radius:var(--radius-lg);font-size:15px;cursor:pointer;font-family:var(--font);transition:all .2s;text-decoration:none}
+.btn-hero-outline:hover{border-color:rgba(255,255,255,.5)}
+.stats{display:flex;gap:56px;justify-content:center;border-top:1px solid rgba(255,255,255,.08);padding-top:48px;flex-wrap:wrap}
+.stat-val{font-size:34px;font-weight:700;font-family:var(--mono);color:var(--green-mid);letter-spacing:-1px}
+.stat-label{font-size:13px;color:rgba(255,255,255,.4);margin-top:3px}
+
+/* FEATURES */
+section{padding:60px 48px;max-width:1100px;margin:0 auto}
+.section-title{font-size:34px;font-weight:700;letter-spacing:-.8px;text-align:center;margin-bottom:8px}
+.section-sub{font-size:15px;color:rgba(255,255,255,.45);text-align:center;margin-bottom:48px}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-lg);padding:24px;transition:all .25s}
+.feat-card:hover{background:rgba(255,255,255,.07);border-color:rgba(34,197,94,.25);transform:translateY(-2px)}
+.feat-icon{width:42px;height:42px;background:rgba(34,197,94,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:20px}
+.feat-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.feat-desc{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6}
+
+/* PRICING */
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.plan{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-xl);padding:28px;position:relative;transition:all .25s}
+.plan:hover{transform:translateY(-2px)}
+.plan.featured{background:rgba(34,197,94,.06);border-color:var(--green-mid);border-width:2px}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--green);color:white;font-size:11px;font-weight:700;padding:4px 16px;border-radius:20px;white-space:nowrap;letter-spacing:.4px}
+.plan-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green-mid);margin-bottom:12px}
+.plan-price{font-size:42px;font-weight:700;font-family:var(--mono);letter-spacing:-1.5px;margin-bottom:4px}
+.plan-price span{font-size:16px;font-weight:400;color:rgba(255,255,255,.4)}
+.plan-desc{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:20px}
+.plan-features{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
+.plan-features li{font-size:13px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:8px}
+.plan-features li::before{content:'✓';color:var(--green-mid);font-weight:700;font-size:12px;flex-shrink:0}
+.plan-btn{width:100%;padding:12px;border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;border:none;text-decoration:none;display:block;text-align:center}
+.plan-btn-outline{background:rgba(255,255,255,.06);color:var(--white)}
+.plan-btn-outline:hover{background:rgba(255,255,255,.12)}
+.plan-btn-green{background:var(--green);color:var(--white)}
+.plan-btn-green:hover{background:var(--green-mid)}
+
+/* SECURITY */
+.sec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+.sec-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius-lg);padding:20px;text-align:center}
+.sec-icon{font-size:26px;margin-bottom:8px}
+.sec-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.sec-desc{font-size:11.5px;color:rgba(255,255,255,.4);line-height:1.5}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.08);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+footer a{color:rgba(255,255,255,.35);font-size:12px;text-decoration:none}
+footer a:hover{color:rgba(255,255,255,.7)}
+
+@media(max-width:768px){
+  nav{padding:14px 20px}.nav-links{display:none}
+  .hero{padding:60px 20px 50px}.hero h1{font-size:32px;letter-spacing:-1px}
+  .feat-grid,.plans-grid{grid-template-columns:1fr}
+  .sec-grid{grid-template-columns:1fr 1fr}
+  section{padding:40px 20px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 18 18" fill="none"><path d="M2 12L6 8L9 10.5L16 4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14.5" r="2.5" fill="white"/></svg></div>
+    <span class="logo-text">Relancio</span>
+  </div>
+  <div class="nav-links">
+    <a href="#features">Fonctionnalités</a>
+    <a href="#pricing">Tarifs</a>
+    <a href="#security">Sécurité</a>
+  </div>
+  <div class="nav-ctas">
+    <a class="btn-ghost" href="login.html">Se connecter</a>
+    <a class="btn-primary" href="register.html">Essai gratuit 14j</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge"><span class="pulse"></span>IA v2.0 — Prédiction des risques de paiement</div>
+  <h1>Récupérez vos<br/><span>factures impayées</span><br/>automatiquement</h1>
+  <p>Relancio détecte les retards, rédige les relances par IA et adapte le ton selon votre client. Connecté à Stripe, QuickBooks, FreshBooks.</p>
+  <div class="hero-ctas">
+    <a class="btn-hero" href="register.html">Démarrer gratuitement — 14 jours</a>
+    <a class="btn-hero-outline" href="login.html">Voir une démo</a>
+  </div>
+  <div class="stats">
+    <div><div class="stat-val">84%</div><div class="stat-label">taux de recouvrement moyen</div></div>
+    <div><div class="stat-val">-34j</div><div class="stat-label">délai de paiement réduit</div></div>
+    <div><div class="stat-val">×143</div><div class="stat-label">ROI moyen après 3 mois</div></div>
+    <div><div class="stat-val">2 800+</div><div class="stat-label">entreprises utilisatrices</div></div>
+  </div>
+</div>
+
+<section id="features">
+  <div class="section-title">Tout ce dont vous avez besoin</div>
+  <div class="section-sub">De la détection à l'encaissement, en pilote automatique</div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon">⚡</div><div class="feat-title">Détection automatique</div><div class="feat-desc">Synchronise vos factures depuis Stripe, QuickBooks ou FreshBooks. Alertes dès le 1er jour de retard.</div></div>
+    <div class="feat-card"><div class="feat-icon">🕐</div><div class="feat-title">Relances programmées</div><div class="feat-desc">Séquences J+30, J+45, J+60 entièrement automatisées. Email + SMS selon le profil client.</div></div>
+    <div class="feat-card"><div class="feat-icon">✨</div><div class="feat-title">IA de rédaction</div><div class="feat-desc">Messages rédigés et personnalisés par l'IA. Ton adapté : cordial → ferme → mise en demeure.</div></div>
+    <div class="feat-card"><div class="feat-icon">🎯</div><div class="feat-title">Prédiction des risques</div><div class="feat-desc">Score de risque IA par client basé sur l'historique. Identifiez les mauvais payeurs avant qu'ils coûtent.</div></div>
+    <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Analytics cashflow</div><div class="feat-desc">Projection de trésorerie sur 30 jours. Entonnoir de recouvrement et ROI en temps réel.</div></div>
+    <div class="feat-card"><div class="feat-icon">🔐</div><div class="feat-title">Sécurité enterprise</div><div class="feat-desc">2FA obligatoire, chiffrement AES-256, logs d'audit complets. Conforme RGPD.</div></div>
+  </div>
+</section>
+
+<section id="pricing" style="border-top:1px solid rgba(255,255,255,.08)">
+  <div class="section-title">Tarifs transparents</div>
+  <div class="section-sub">Pas de frais cachés · Annulez à tout moment · Essai 14 jours gratuit</div>
+  <div class="plans-grid">
+    <div class="plan">
+      <div class="plan-name">Freelance</div>
+      <div class="plan-price">19€<span>/mois</span></div>
+      <div class="plan-desc">Pour les indépendants</div>
+      <ul class="plan-features">
+        <li>Jusqu'à 20 factures/mois</li><li>5 clients actifs</li><li>Email uniquement</li>
+        <li>3 templates de relance</li><li>Analytics de base</li><li>Support email 48h</li>
+      </ul>
+      <a class="plan-btn plan-btn-outline" href="register.html?plan=freelance">Commencer</a>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">PLUS POPULAIRE</div>
+      <div class="plan-name">Agence</div>
+      <div class="plan-price">49€<span>/mois</span></div>
+      <div class="plan-desc">Pour les agences et PME</div>
+      <ul class="plan-features">
+        <li>Factures illimitées</li><li>Clients illimités</li><li>Email + SMS</li>
+        <li>Templates illimités + IA</li><li>Analytics avancés + risques IA</li>
+        <li>Intégrations Stripe, QBO</li><li>Support prioritaire 4h</li><li>Logs d'audit</li>
+      </ul>
+      <a class="plan-btn plan-btn-green" href="register.html?plan=agence">Commencer</a>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price">149€<span>/mois</span></div>
+      <div class="plan-desc">Multi-utilisateurs & API</div>
+      <ul class="plan-features">
+        <li>Tout Agence inclus</li><li>5 utilisateurs</li><li>API REST complète</li>
+        <li>SSO / SAML</li><li>Rôles et permissions</li><li>SLA 99.9% garanti</li><li>Onboarding dédié</li>
+      </ul>
+      <a class="plan-btn plan-btn-outline" href="register.html?plan=enterprise">Commencer</a>
+    </div>
+  </div>
+</section>
+
+<section id="security" style="border-top:1px solid rgba(255,255,255,.08)">
+  <div class="section-title">Sécurité de niveau enterprise</div>
+  <div class="section-sub">Vos données financières méritent la meilleure protection</div>
+  <div class="sec-grid">
+    <div class="sec-card"><div class="sec-icon">🔐</div><div class="sec-title">Chiffrement AES-256</div><div class="sec-desc">Données chiffrées au repos et en transit via TLS 1.3</div></div>
+    <div class="sec-card"><div class="sec-icon">🛡️</div><div class="sec-title">2FA Obligatoire</div><div class="sec-desc">Code OTP envoyé par email à chaque connexion</div></div>
+    <div class="sec-card"><div class="sec-icon">📋</div><div class="sec-title">Logs d'audit</div><div class="sec-desc">Chaque action tracée avec IP, timestamp et user-agent</div></div>
+    <div class="sec-card"><div class="sec-icon">🇪🇺</div><div class="sec-title">RGPD Conforme</div><div class="sec-desc">Hébergement EU, DPA disponible, droit à l'oubli</div></div>
+    <div class="sec-card"><div class="sec-icon">⚡</div><div class="sec-title">Rate Limiting</div><div class="sec-desc">Protection brute-force et anti-abus API</div></div>
+    <div class="sec-card"><div class="sec-icon">🔑</div><div class="sec-title">Session sécurisée</div><div class="sec-desc">JWT rotatifs, expiration 2h, CSP strict</div></div>
+    <div class="sec-card"><div class="sec-icon">💳</div><div class="sec-title">PCI-DSS via Stripe</div><div class="sec-desc">Aucune carte stockée. Paiements via Stripe Elements</div></div>
+    <div class="sec-card"><div class="sec-icon">👁️</div><div class="sec-title">Monitoring 24/7</div><div class="sec-desc">Détection d'anomalies en temps réel</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo" style="gap:8px">
+    <div class="logo-icon" style="width:26px;height:26px;border-radius:7px"><svg viewBox="0 0 18 18" fill="none"><path d="M2 12L6 8L9 10.5L16 4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14.5" r="2.5" fill="white"/></svg></div>
+    <span style="font-size:14px;font-weight:700">Relancio</span>
+  </div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+    <a href="#">Mentions légales</a><a href="#">RGPD</a><a href="#">Sécurité</a><a href="#">API Docs</a>
+  </div>
+  <div style="font-size:12px;color:rgba(255,255,255,.25)">© 2025 Relancio SAS</div>
+</footer>
+
+</body>
+</html>

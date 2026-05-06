@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Créer un compte — Relancio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#16a34a;--green-light:#dcfce7;--green-dark:#14532d;--green-mid:#22c55e;--slate:#0f172a;--red:#dc2626;--red-light:#fee2e2;--gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-400:#94a3b8;--gray-600:#475569;--white:#fff;--font:'Sora',sans-serif;--radius:10px;--radius-lg:16px;--shadow-lg:0 10px 25px rgba(0,0,0,.1)}
+body{font-family:var(--font);background:var(--gray-100);color:var(--slate);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;-webkit-font-smoothing:antialiased}
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:36px;width:100%;max-width:460px;box-shadow:var(--shadow-lg)}
+.logo{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:24px}
+.logo-icon{width:32px;height:32px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:18px;height:18px}
+.logo-text{font-size:16px;font-weight:700;letter-spacing:-.3px}
+h1{font-size:22px;font-weight:700;letter-spacing:-.5px;text-align:center;margin-bottom:6px}
+.sub{font-size:13.5px;color:var(--gray-400);text-align:center;margin-bottom:24px;line-height:1.6}
+.promo{background:var(--green-light);border:1px solid rgba(22,163,74,.2);border-radius:var(--radius);padding:10px 14px;margin-bottom:20px;font-size:12.5px;color:var(--green-dark);display:flex;align-items:center;gap:8px}
+.error-box{display:none;background:var(--red-light);border:1px solid rgba(220,38,38,.2);border-radius:var(--radius);padding:10px 12px;font-size:12.5px;color:var(--red);margin-bottom:14px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--gray-600);margin-bottom:6px}
+input,select{width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:var(--radius);font-size:14px;font-family:var(--font);color:var(--slate);background:var(--white);transition:border-color .2s;outline:none}
+input:focus,select:focus{border-color:var(--green)}
+.input-wrap{position:relative}
+.input-wrap input{padding-right:44px}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray-400);padding:4px}
+.strength-bar{height:3px;background:var(--gray-200);border-radius:3px;margin-top:5px;overflow:hidden}
+.strength-fill{height:100%;border-radius:3px;transition:width .3s,background .3s;width:0}
+.strength-text{font-size:11px;margin-top:3px;color:var(--gray-400)}
+.terms{display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;font-size:12px;color:var(--gray-600);line-height:1.5}
+.terms input{width:15px;height:15px;accent-color:var(--green);flex-shrink:0;margin-top:2px;cursor:pointer}
+.terms a{color:var(--green);text-decoration:none}
+.btn{width:100%;padding:12px;background:var(--green);color:var(--white);border:none;border-radius:var(--radius);font-size:14.5px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;position:relative;overflow:hidden}
+.btn:hover:not(:disabled){background:#15803d;transform:translateY(-1px)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn.loading::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+.switch{text-align:center;font-size:13px;color:var(--gray-400);margin-top:18px}
+.switch a{color:var(--green);text-decoration:none;font-weight:500}
+.plan-selected{background:var(--gray-100);border:1.5px solid var(--green);border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.plan-selected-name{font-weight:600;color:var(--slate)}
+.plan-selected-price{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--green)}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 18 18" fill="none"><path d="M2 12L6 8L9 10.5L16 4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14.5" r="2.5" fill="white"/></svg></div>
+    <span class="logo-text">Relancio</span>
+  </div>
+  <h1>Créer votre compte</h1>
+  <p class="sub">14 jours gratuits · Aucune carte requise · Annulez à tout moment</p>
+
+  <div class="promo">🎁 <span><strong>Offre de lancement :</strong> 2 mois offerts avec le code <code style="background:rgba(22,163,74,.15);padding:1px 5px;border-radius:4px">LAUNCH2025</code></span></div>
+
+  <div class="error-box" id="reg-error"></div>
+
+  <div id="plan-selected-banner" style="display:none" class="plan-selected">
+    <span class="plan-selected-name">Plan <span id="plan-display-name">Agence</span></span>
+    <span class="plan-selected-price"><span id="plan-display-price">49</span>€/mois</span>
+  </div>
+
+  <div class="grid-2">
+    <div class="field"><label>Prénom *</label><input type="text" id="reg-fname" placeholder="Marie" autocomplete="given-name"/></div>
+    <div class="field"><label>Nom *</label><input type="text" id="reg-lname" placeholder="Laurent" autocomplete="family-name"/></div>
+  </div>
+  <div class="field"><label>Email professionnel *</label><input type="email" id="reg-email" placeholder="vous@entreprise.com" autocomplete="email"/></div>
+  <div class="field"><label>Entreprise</label><input type="text" id="reg-company" placeholder="Votre agence, SAS..." autocomplete="organization"/></div>
+  <div class="field">
+    <label>Mot de passe * <span style="font-weight:400;color:var(--gray-400)">(min. 12 caractères)</span></label>
+    <div class="input-wrap">
+      <input type="password" id="reg-pass" placeholder="Minimum 12 caractères" autocomplete="new-password" oninput="checkStrength(this.value)"/>
+      <button class="eye-btn" onclick="togglePw('reg-pass')" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+    <div class="strength-text" id="strength-text">Entrez un mot de passe fort</div>
+  </div>
+  <div class="terms">
+    <input type="checkbox" id="reg-terms"/>
+    <label for="reg-terms">J'accepte les <a href="#">CGU</a>, la <a href="#">politique de confidentialité</a> et le traitement de mes données personnelles conformément au RGPD.</label>
+  </div>
+  <button class="btn" id="reg-btn" onclick="handleRegister()">Créer mon compte sécurisé →</button>
+  <div class="switch">Déjà un compte ? <a href="login.html">Se connecter</a></div>
+</div>
+
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:#0f172a;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:9999"></div>
+
+<script>
+const API_BASE = 'https://VOTRE-BACKEND.railway.app';
+
+// Pre-select plan from URL
+const params = new URLSearchParams(location.search);
+const planParam = params.get('plan');
+const PLANS = { freelance:{name:'Freelance',price:19}, agence:{name:'Agence',price:49}, enterprise:{name:'Enterprise',price:149} };
+if (planParam && PLANS[planParam]) {
+  document.getElementById('plan-selected-banner').style.display = 'flex';
+  document.getElementById('plan-display-name').textContent = PLANS[planParam].name;
+  document.getElementById('plan-display-price').textContent = PLANS[planParam].price;
+}
+
+function togglePw(id) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function checkStrength(pw) {
+  let score = 0;
+  if (pw.length >= 12) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  if (pw.length >= 16) score++;
+  const pct = (score / 5) * 100;
+  const colors = ['#dc2626','#f97316','#eab308','#22c55e','#16a34a'];
+  const labels = ['Trop faible','Faible','Moyen','Fort','Très fort'];
+  const fill = document.getElementById('strength-fill');
+  const text = document.getElementById('strength-text');
+  fill.style.width = pct + '%';
+  fill.style.background = colors[Math.max(0,score-1)];
+  text.textContent = pw ? labels[Math.max(0,score-1)] : 'Entrez un mot de passe fort';
+  text.style.color = colors[Math.max(0,score-1)] || 'var(--gray-400)';
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type === 'error' ? '#7f1d1d' : type === 'success' ? '#14532d' : '#0f172a';
+  t.style.opacity='1';t.style.transform='translateY(0)';
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},3200);
+}
+
+async function handleRegister() {
+  const fname   = document.getElementById('reg-fname').value.trim();
+  const lname   = document.getElementById('reg-lname').value.trim();
+  const email   = document.getElementById('reg-email').value.trim();
+  const company = document.getElementById('reg-company').value.trim();
+  const pass    = document.getElementById('reg-pass').value;
+  const terms   = document.getElementById('reg-terms').checked;
+  const errBox  = document.getElementById('reg-error');
+  const btn     = document.getElementById('reg-btn');
+
+  errBox.style.display = 'none';
+
+  if (!fname||!lname||!email||!pass) { errBox.textContent='Remplissez tous les champs obligatoires.';errBox.style.display='block';return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errBox.textContent='Email invalide.';errBox.style.display='block';return; }
+  if (pass.length < 12) { errBox.textContent='Le mot de passe doit faire au moins 12 caractères.';errBox.style.display='block';return; }
+  if (!terms) { errBox.textContent='Veuillez accepter les conditions.';errBox.style.display='block';return; }
+
+  btn.classList.add('loading'); btn.disabled = true;
+
+  try {
+    const res = await fetch(API_BASE + '/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.toLowerCase(), password: pass, first_name: fname, last_name: lname, company: company || undefined }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur');
+
+    // Redirect to login with OTP flow
+    sessionStorage.setItem('_pending_uid', data.userId);
+    sessionStorage.setItem('_pending_email', email);
+    window.location.href = 'login.html?verify=1&uid=' + data.userId + '&email=' + encodeURIComponent(email);
+
+  } catch(err) {
+    errBox.textContent = err.message;
+    errBox.style.display = 'block';
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Enter') handleRegister(); });
+</script>
+</body>
+</html>

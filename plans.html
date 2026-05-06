@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Choisir un plan — Relancio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#16a34a;--green-light:#dcfce7;--green-dark:#14532d;--green-mid:#22c55e;--slate:#0f172a;--red:#dc2626;--amber:#d97706;--amber-light:#fef3c7;--gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-400:#94a3b8;--gray-600:#475569;--white:#fff;--blue:#2563eb;--blue-light:#dbeafe;--font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace;--radius:10px;--radius-lg:16px;--radius-xl:24px}
+body{font-family:var(--font);background:var(--gray-100);color:var(--slate);min-height:100vh;padding:32px 20px;-webkit-font-smoothing:antialiased}
+.container{max-width:900px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:32px}
+.logo-icon{width:30px;height:30px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:17px;height:17px}
+.logo-text{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-xl);padding:36px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
+h1{font-size:26px;font-weight:700;letter-spacing:-.5px;text-align:center;margin-bottom:6px}
+.sub{font-size:14px;color:var(--gray-400);text-align:center;margin-bottom:28px}
+.trial-banner{background:var(--green-light);border:1px solid rgba(22,163,74,.2);border-radius:var(--radius);padding:12px 16px;margin-bottom:24px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--green-dark)}
+.trial-banner svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.plan{border:2px solid var(--gray-200);border-radius:var(--radius-lg);padding:20px;cursor:pointer;transition:all .2s;position:relative}
+.plan:hover{border-color:var(--green)}
+.plan.selected{border-color:var(--green);background:var(--green-light)}
+.plan.popular::before{content:'POPULAIRE';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:white;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap}
+.plan-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray-400);margin-bottom:8px}
+.plan.selected .plan-name{color:var(--green-dark)}
+.plan-price{font-size:28px;font-weight:700;font-family:var(--mono);letter-spacing:-1px;margin-bottom:4px}
+.plan-price span{font-size:13px;font-weight:400;color:var(--gray-400)}
+.plan-feats{margin-top:10px;display:flex;flex-direction:column;gap:5px}
+.plan-feat{font-size:12px;color:var(--gray-600);display:flex;align-items:center;gap:5px}
+.plan-feat::before{content:'✓';color:var(--green);font-weight:700;font-size:11px}
+.payment-section{border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
+.pay-title{font-size:13px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:6px;color:var(--slate)}
+.pay-title svg{width:14px;height:14px;stroke:var(--green);fill:none;stroke-width:2}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--gray-600);margin-bottom:5px}
+input{width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:var(--radius);font-size:13.5px;font-family:var(--font);color:var(--slate);background:var(--white);transition:border-color .2s;outline:none}
+input:focus{border-color:var(--green)}
+.card-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card-field{background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:11px 14px;font-size:13.5px;color:var(--gray-400);font-family:var(--mono);cursor:text;transition:border-color .2s}
+.card-field:focus-within{border-color:var(--green);background:var(--white)}
+.secure-badges{display:flex;align-items:center;gap:16px;margin-top:12px;flex-wrap:wrap}
+.badge-sec{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--gray-400)}
+.badge-sec svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.coupon-row{display:flex;gap:8px;margin-bottom:16px}
+.coupon-row input{flex:1;max-width:200px}
+.coupon-btn{padding:10px 18px;background:transparent;border:1.5px solid var(--gray-200);border-radius:var(--radius);font-size:13px;cursor:pointer;font-family:var(--font);transition:all .2s;color:var(--gray-600);white-space:nowrap}
+.coupon-btn:hover{border-color:var(--green);color:var(--green)}
+.coupon-ok{font-size:12.5px;color:var(--green);font-weight:500;display:none;align-items:center;gap:4px}
+.total-row{display:flex;align-items:flex-end;justify-content:space-between;padding-top:16px;border-top:1px solid var(--gray-200);flex-wrap:wrap;gap:12px}
+.total-info{font-size:13px;color:var(--gray-400)}
+.total-price{font-size:22px;font-weight:700;font-family:var(--mono);color:var(--slate)}
+.total-after{font-size:11.5px;color:var(--green);margin-top:2px}
+.btn{background:var(--green);color:var(--white);border:none;padding:14px 36px;border-radius:var(--radius-lg);font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;position:relative;overflow:hidden;white-space:nowrap}
+.btn:hover:not(:disabled){background:#15803d;transform:translateY(-1px)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn.loading::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+.stripe-logo{background:#635BFF;color:white;font-size:11px;font-weight:700;padding:2px 9px;border-radius:5px;letter-spacing:.5px}
+@media(max-width:600px){.plans{grid-template-columns:1fr}.card-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 18 18" fill="none"><path d="M2 12L6 8L9 10.5L16 4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14.5" r="2.5" fill="white"/></svg></div>
+    <span class="logo-text">Relancio</span>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);text-align:center;margin-bottom:8px">Dernière étape</div>
+    <h1>Choisissez votre plan</h1>
+    <p class="sub">14 jours d'essai gratuit · Aucun débit immédiat · Résiliez à tout moment</p>
+
+    <div class="trial-banner">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Votre carte ne sera <strong>pas débitée</strong> avant la fin des 14 jours. Annulez à tout moment depuis les paramètres.</span>
+    </div>
+
+    <div class="plans" id="plans-grid">
+      <div class="plan" onclick="selectPlan(this,'freelance',19)" data-plan="freelance">
+        <div class="plan-name">Freelance</div>
+        <div class="plan-price">19€<span>/mois</span></div>
+        <div class="plan-feats">
+          <div class="plan-feat">20 factures/mois</div>
+          <div class="plan-feat">5 clients</div>
+          <div class="plan-feat">Email uniquement</div>
+          <div class="plan-feat">3 templates</div>
+        </div>
+      </div>
+      <div class="plan popular" onclick="selectPlan(this,'agence',49)" data-plan="agence">
+        <div class="plan-name">Agence</div>
+        <div class="plan-price">49€<span>/mois</span></div>
+        <div class="plan-feats">
+          <div class="plan-feat">Factures illimitées</div>
+          <div class="plan-feat">Email + SMS + IA</div>
+          <div class="plan-feat">Prédiction risques</div>
+          <div class="plan-feat">Intégrations</div>
+          <div class="plan-feat">Analytics avancés</div>
+        </div>
+      </div>
+      <div class="plan" onclick="selectPlan(this,'enterprise',149)" data-plan="enterprise">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">149€<span>/mois</span></div>
+        <div class="plan-feats">
+          <div class="plan-feat">5 utilisateurs</div>
+          <div class="plan-feat">API REST complète</div>
+          <div class="plan-feat">SSO / SAML</div>
+          <div class="plan-feat">SLA 99.9%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coupon-row">
+      <input type="text" id="coupon-input" placeholder="Code promo (ex: LAUNCH2025)"/>
+      <button class="coupon-btn" onclick="applyCoupon()">Appliquer</button>
+      <div class="coupon-ok" id="coupon-ok">✓ Réduction appliquée !</div>
+    </div>
+
+    <div class="payment-section">
+      <div class="pay-title">
+        <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Informations de paiement — sécurisé par <span class="stripe-logo" style="margin-left:4px">stripe</span>
+      </div>
+      <!-- NOTE: En production, remplacer ces champs par Stripe Elements (stripe.js) -->
+      <div class="field">
+        <label>Nom sur la carte</label>
+        <input type="text" id="card-name" placeholder="Marie Laurent" autocomplete="cc-name"/>
+      </div>
+      <div class="field">
+        <label>Numéro de carte</label>
+        <div class="card-field" id="stripe-card-element">
+          <!-- Stripe Elements monte ici en production -->
+          <input type="text" style="border:none;background:transparent;outline:none;width:100%;font-family:var(--mono);font-size:13.5px" placeholder="4242 4242 4242 4242" maxlength="19" oninput="formatCard(this)"/>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="field">
+          <label>Date d'expiration</label>
+          <div class="card-field"><input type="text" style="border:none;background:transparent;outline:none;width:100%;font-family:var(--mono)" placeholder="MM / AA" maxlength="7" oninput="formatExpiry(this)"/></div>
+        </div>
+        <div class="field">
+          <label>CVC</label>
+          <div class="card-field"><input type="text" style="border:none;background:transparent;outline:none;width:100%;font-family:var(--mono)" placeholder="123" maxlength="4"/></div>
+        </div>
+      </div>
+      <div class="secure-badges">
+        <div class="badge-sec"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>SSL 256-bit</div>
+        <div class="badge-sec"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>PCI-DSS</div>
+        <div class="badge-sec"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>3D Secure</div>
+        <div style="margin-left:auto;font-size:11px;color:var(--gray-400)">Paiement traité par <span class="stripe-logo">stripe</span></div>
+      </div>
+    </div>
+
+    <div class="total-row">
+      <div>
+        <div class="total-info">Total aujourd'hui</div>
+        <div class="total-price">0,00 €</div>
+        <div class="total-after">puis <span id="total-after-text">49€/mois</span> à partir du <span id="trial-end-date"></span></div>
+      </div>
+      <button class="btn" id="pay-btn" onclick="handleCheckout()">Activer l'essai gratuit →</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:#0f172a;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:9999;max-width:300px"></div>
+
+<script>
+const API_BASE = 'https://VOTRE-BACKEND.railway.app';
+let selectedPlan = 'agence';
+let selectedPrice = 49;
+
+// Auto-select from URL or default to agence
+const urlPlan = new URLSearchParams(location.search).get('plan') || 'agence';
+window.addEventListener('DOMContentLoaded', () => {
+  const planEl = document.querySelector(`[data-plan="${urlPlan}"]`);
+  if (planEl) planEl.click();
+  else document.querySelector('[data-plan="agence"]').click();
+
+  // Set trial end date
+  const d = new Date(); d.setDate(d.getDate() + 14);
+  document.getElementById('trial-end-date').textContent = d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+});
+
+function selectPlan(el, plan, price) {
+  document.querySelectorAll('.plan').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPlan = plan;
+  selectedPrice = price;
+  document.getElementById('total-after-text').textContent = price + '€/mois';
+}
+
+function applyCoupon() {
+  const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+  const ok = document.getElementById('coupon-ok');
+  if (code === 'LAUNCH2025') {
+    ok.style.display = 'flex';
+    showToast('✓ Code appliqué : 2 mois offerts', 'success');
+  } else {
+    showToast('Code invalide', 'error');
+  }
+}
+
+function formatCard(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function formatExpiry(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,4);
+  if (v.length >= 3) v = v.slice(0,2) + ' / ' + v.slice(2);
+  el.value = v;
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type==='error'?'#7f1d1d':type==='success'?'#14532d':'#0f172a';
+  t.style.opacity='1';t.style.transform='translateY(0)';
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},3000);
+}
+
+async function handleCheckout() {
+  const name = document.getElementById('card-name').value.trim();
+  const btn  = document.getElementById('pay-btn');
+  if (!name) { showToast('Entrez le nom sur la carte','error'); return; }
+
+  const token = sessionStorage.getItem('_rt');
+  if (!token) { showToast('Session expirée, reconnectez-vous','error'); setTimeout(()=>location.href='login.html',1500); return; }
+
+  btn.classList.add('loading'); btn.disabled = true;
+
+  try {
+    const res = await fetch(API_BASE + '/stripe/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ plan: selectedPlan }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur');
+
+    // Redirect to Stripe Checkout
+    window.location.href = data.url;
+
+  } catch(err) {
+    showToast(err.message, 'error');
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

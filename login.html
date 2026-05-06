@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Connexion — Relancio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#16a34a;--green-light:#dcfce7;--green-dark:#14532d;--green-mid:#22c55e;
+  --slate:#0f172a;--red:#dc2626;--red-light:#fee2e2;--amber:#d97706;--amber-light:#fef3c7;
+  --blue:#2563eb;--blue-light:#dbeafe;
+  --gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-400:#94a3b8;--gray-600:#475569;
+  --white:#fff;--font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace;
+  --radius:10px;--radius-lg:16px;--shadow-lg:0 10px 25px rgba(0,0,0,.1);
+}
+body{font-family:var(--font);background:var(--gray-100);color:var(--slate);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;-webkit-font-smoothing:antialiased}
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:36px;width:100%;max-width:420px;box-shadow:var(--shadow-lg)}
+.logo{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:28px}
+.logo-icon{width:32px;height:32px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:18px;height:18px}
+.logo-text{font-size:16px;font-weight:700;letter-spacing:-.3px}
+h1{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px;text-align:center}
+.sub{font-size:13.5px;color:var(--gray-400);text-align:center;margin-bottom:28px;line-height:1.6}
+.sec-notice{display:flex;align-items:flex-start;gap:8px;background:var(--blue-light);border:1px solid rgba(37,99,235,.2);border-radius:var(--radius);padding:10px 12px;margin-bottom:18px;font-size:12px;color:var(--blue)}
+.sec-notice svg{width:14px;height:14px;flex-shrink:0;margin-top:1px;stroke:currentColor;fill:none;stroke-width:2}
+.error-box{display:none;background:var(--red-light);border:1px solid rgba(220,38,38,.2);border-radius:var(--radius);padding:10px 12px;font-size:12.5px;color:var(--red);margin-bottom:14px}
+.field{margin-bottom:14px}
+.field label{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:500;color:var(--gray-600);margin-bottom:6px}
+.field label a{color:var(--green);text-decoration:none;font-size:12px}
+.input-wrap{position:relative}
+.input-wrap input{padding-right:44px}
+input{width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:var(--radius);font-size:14px;font-family:var(--font);color:var(--slate);background:var(--white);transition:border-color .2s;outline:none}
+input:focus{border-color:var(--green)}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray-400);padding:4px}
+.remember{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:12.5px;color:var(--gray-600);cursor:pointer}
+.remember input{width:15px;height:15px;accent-color:var(--green);cursor:pointer}
+.btn{width:100%;padding:12px;background:var(--green);color:var(--white);border:none;border-radius:var(--radius);font-size:14.5px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;position:relative;overflow:hidden;margin-top:4px}
+.btn:hover:not(:disabled){background:#15803d;transform:translateY(-1px)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn.loading::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--gray-400);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--gray-200)}
+.oauth{width:100%;padding:10px;border:1.5px solid var(--gray-200);border-radius:var(--radius);background:var(--white);cursor:pointer;font-family:var(--font);font-size:13.5px;color:var(--gray-600);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:8px}
+.oauth:hover{border-color:var(--gray-400);background:var(--gray-100)}
+.switch{text-align:center;font-size:13px;color:var(--gray-400);margin-top:20px}
+.switch a{color:var(--green);text-decoration:none;font-weight:500}
+
+/* ── OTP Screen ── */
+#screen-otp{display:none}
+.otp-grid{display:flex;gap:8px;justify-content:center;margin:18px 0}
+.otp-box{width:50px;height:58px;text-align:center;font-size:26px;font-weight:700;font-family:var(--mono);border:2px solid var(--gray-200);border-radius:var(--radius);color:var(--slate);background:var(--white);outline:none;transition:border-color .2s;caret-color:var(--green)}
+.otp-box:focus{border-color:var(--green);background:#f0fdf4}
+.otp-box.filled{border-color:var(--green);background:var(--green-light)}
+.otp-box.error-border{border-color:var(--red);animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.email-preview{background:#f8fafc;border:1.5px solid var(--gray-200);border-radius:12px;padding:14px;margin:12px 0;text-align:left;position:relative;overflow:hidden}
+.email-preview::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--green-mid))}
+.ep-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ep-sender{width:26px;height:26px;background:var(--green-light);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ep-info{flex:1}
+.ep-from{font-size:12px;font-weight:600;color:var(--slate)}
+.ep-to{font-size:11px;color:var(--gray-400)}
+.ep-time{font-size:10px;color:var(--gray-400);font-family:var(--mono)}
+.ep-subject{font-size:12px;color:var(--gray-600);margin-bottom:8px;font-weight:500}
+.ep-code{text-align:center;margin:8px 0}
+.ep-code-val{font-family:var(--mono);font-size:32px;font-weight:700;letter-spacing:8px;color:var(--slate);background:var(--green-light);border:2px dashed rgba(22,163,74,.4);padding:8px 14px;border-radius:10px;display:inline-block;cursor:pointer;user-select:all}
+.ep-code-val:hover{background:#bbf7d0}
+.ep-footer{font-size:11px;color:var(--gray-400);display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.timer-badge{font-family:var(--mono);font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;background:var(--green-light);color:var(--green-dark)}
+.timer-badge.warn{background:var(--amber-light);color:var(--amber)}
+.timer-badge.expired{background:var(--red-light);color:var(--red)}
+.copy-hint{font-size:11px;color:var(--green);margin-top:4px;display:none;text-align:center}
+.otp-error{display:none;color:var(--red);font-size:12.5px;margin-bottom:8px;text-align:center}
+.resend-link{color:var(--green);text-decoration:none;font-weight:500}
+.resend-link:disabled{color:var(--gray-400);cursor:not-allowed}
+.sending-anim{text-align:center;padding:20px 0}
+.sending-anim .spin-icon{font-size:36px;display:inline-block;animation:spin2 1s linear infinite}
+@keyframes spin2{to{transform:rotate(360deg)}}
+.loader-bar{width:100%;height:3px;background:var(--gray-200);border-radius:3px;margin-top:16px;overflow:hidden}
+.loader-fill{height:100%;background:var(--green);border-radius:3px;animation:loadSlide 1.2s ease-in-out infinite}
+@keyframes loadSlide{0%{width:0;margin-left:0}50%{width:60%;margin-left:0}100%{width:0;margin-left:100%}}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 18 18" fill="none"><path d="M2 12L6 8L9 10.5L16 4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14.5" r="2.5" fill="white"/></svg></div>
+    <span class="logo-text">Relancio</span>
+  </div>
+
+  <!-- ── LOGIN FORM ── -->
+  <div id="screen-login">
+    <h1>Connexion</h1>
+    <p class="sub">Accédez à votre espace sécurisé</p>
+
+    <div class="sec-notice">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Connexion sécurisée TLS 1.3 · 2FA obligatoire
+    </div>
+
+    <div class="error-box" id="login-error"></div>
+
+    <div class="field">
+      <label>Email professionnel</label>
+      <input type="email" id="login-email" placeholder="vous@entreprise.com" autocomplete="email"/>
+    </div>
+    <div class="field">
+      <label>Mot de passe <a href="forgot.html">Oublié ?</a></label>
+      <div class="input-wrap">
+        <input type="password" id="login-pass" placeholder="••••••••••" autocomplete="current-password"/>
+        <button class="eye-btn" onclick="togglePw('login-pass')" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <label class="remember"><input type="checkbox" id="remember"/> Se souvenir de moi</label>
+    <button class="btn" id="login-btn" onclick="handleLogin()">Se connecter</button>
+
+    <div class="divider">ou</div>
+    <button class="oauth" onclick="showToast('Redirection Google...')">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continuer avec Google
+    </button>
+    <div class="switch">Pas encore de compte ? <a href="register.html">Créer un compte gratuit →</a></div>
+  </div>
+
+  <!-- ── OTP SCREEN ── -->
+  <div id="screen-otp">
+
+    <!-- Sending animation -->
+    <div id="otp-sending">
+      <div class="sending-anim">
+        <span class="spin-icon">📨</span>
+        <div style="font-size:16px;font-weight:600;margin-top:12px;color:var(--slate)">Envoi du code…</div>
+        <div style="font-size:13px;color:var(--gray-400);margin-top:6px">Code de vérification envoyé à<br/><strong id="otp-email-sending"></strong></div>
+        <div class="loader-bar"><div class="loader-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- OTP entry -->
+    <div id="otp-ready" style="display:none">
+      <div style="font-size:36px;text-align:center;margin-bottom:10px">🔐</div>
+      <h1>Vérification 2FA</h1>
+      <p class="sub">Code envoyé à <strong id="otp-email-display"></strong></p>
+
+      <div class="email-preview">
+        <div class="ep-header">
+          <div class="ep-sender">📧</div>
+          <div class="ep-info">
+            <div class="ep-from">Relancio Security</div>
+            <div class="ep-to">security@relancio.fr → <span id="otp-preview-to"></span></div>
+          </div>
+          <div class="ep-time">à l'instant</div>
+        </div>
+        <div class="ep-subject">Objet : Votre code de connexion Relancio</div>
+        <div class="ep-code">
+          <div class="ep-code-val" id="otp-code-display" onclick="copyOTPCode()" title="Cliquer pour copier">– – – – – –</div>
+        </div>
+        <div class="copy-hint" id="copy-hint">✓ Code copié !</div>
+        <div class="ep-footer">
+          <span>⚠️ Ne partagez jamais ce code</span>
+          <span class="timer-badge" id="otp-timer">10:00</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;color:var(--gray-400);text-align:center;margin-bottom:10px">
+        Saisissez le code dans les cases :
+      </div>
+
+      <div class="otp-grid" id="otp-grid">
+        <input class="otp-box" maxlength="1" type="text" inputmode="numeric" oninput="handleOTP(this,0)" onkeydown="otpKey(event,0)"/>
+        <input class="otp-box" maxlength="1" type="text" inputmode="numeric" oninput="handleOTP(this,1)" onkeydown="otpKey(event,1)"/>
+        <input class="otp-box" maxlength="1" type="text" inputmode="numeric" oninput="handleOTP(this,2)" onkeydown="otpKey(event,2)"/>
+        <input class="otp-box" maxlength="1" type="text" inputmode="numeric" oninput="handleOTP(this,3)" onkeydown="otpKey(event,3)"/>
+        <input class="otp-box" maxlength="1" type="text" inputmode="numeric" oninput="handleOTP(this,4)" onkeydown="otpKey(event,4)"/>
+        <input class="otp-box" maxlength="1" type="text" inputmode="numeric" oninput="handleOTP(this,5)" onkeydown="otpKey(event,5)"/>
+      </div>
+
+      <div class="otp-error" id="otp-error"></div>
+      <button class="btn" id="otp-btn" onclick="handleVerifyOTP()">Vérifier le code</button>
+      <div style="text-align:center;margin-top:14px;font-size:12.5px;color:var(--gray-400)">
+        Code non reçu ? <a href="#" class="resend-link" id="resend-link" onclick="handleResend(event)">Renvoyer</a>
+        <span id="resend-countdown" style="display:none;color:var(--gray-400)"> (attendre <span id="resend-sec">60</span>s)</span>
+      </div>
+      <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--gray-400)">
+        🔒 Code cryptographique · Usage unique · Valable 10 min
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:#0f172a;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:9999;max-width:300px"></div>
+
+<script>
+// ── Config ──
+const API_BASE = 'https://VOTRE-BACKEND.railway.app'; // ← Remplacer après déploiement
+
+// In-memory state only
+const STATE = { userId: null, email: '' };
+
+// OTP state
+let otpExpiry = null;
+let otpCountdown = null;
+let resendCooldown = null;
+let resendLeft = 0;
+
+// ── Helpers ──
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type === 'error' ? '#7f1d1d' : type === 'success' ? '#14532d' : '#0f172a';
+  t.style.opacity = '1'; t.style.transform = 'translateY(0)';
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(8px)'; }, 3000);
+}
+
+function togglePw(id) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.style.display = 'block';
+}
+
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(API_BASE + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', ...opts.headers },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw Object.assign(new Error(data.error || 'Erreur'), { status: res.status });
+  return data;
+}
+
+// ════════════════════════════════════════
+// HANDLE LOGIN
+// ════════════════════════════════════════
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const btn   = document.getElementById('login-btn');
+
+  document.getElementById('login-error').style.display = 'none';
+
+  if (!email || !pass) { showError('login-error','Remplissez tous les champs.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('login-error','Email invalide.'); return; }
+
+  btn.classList.add('loading'); btn.disabled = true;
+
+  try {
+    const data = await apiFetch('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password: pass }),
+    });
+
+    STATE.userId = data.userId;
+    STATE.email  = email;
+    showOTPScreen(email);
+
+  } catch (err) {
+    showError('login-error', err.message);
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ════════════════════════════════════════
+// OTP SCREEN
+// ════════════════════════════════════════
+function showOTPScreen(email) {
+  document.getElementById('screen-login').style.display = 'none';
+  document.getElementById('screen-otp').style.display   = 'block';
+  document.getElementById('otp-email-sending').textContent = email;
+  document.getElementById('otp-sending').style.display = 'block';
+  document.getElementById('otp-ready').style.display   = 'none';
+
+  // Show ready state after animation (email was already sent by backend)
+  setTimeout(() => {
+    document.getElementById('otp-sending').style.display = 'none';
+    document.getElementById('otp-ready').style.display   = 'block';
+    document.getElementById('otp-email-display').textContent = email;
+    document.getElementById('otp-preview-to').textContent    = email;
+
+    // ⚠️ In production: backend sends the real code by email.
+    // Here we show a placeholder — the user reads their email.
+    document.getElementById('otp-code-display').textContent = '✉️ Vérifiez vos emails';
+    document.getElementById('otp-code-display').style.fontSize = '14px';
+    document.getElementById('otp-code-display').style.letterSpacing = '0';
+
+    startOTPTimer(600);
+    startResendCooldown(60);
+
+    setTimeout(() => {
+      const inputs = document.querySelectorAll('.otp-box');
+      if (inputs[0]) inputs[0].focus();
+    }, 200);
+  }, 1600);
+}
+
+function startOTPTimer(seconds) {
+  if (otpCountdown) clearInterval(otpCountdown);
+  otpExpiry = Date.now() + seconds * 1000;
+  updateTimer();
+  otpCountdown = setInterval(() => {
+    const left = Math.max(0, Math.ceil((otpExpiry - Date.now()) / 1000));
+    updateTimer(left);
+    if (left <= 0) {
+      clearInterval(otpCountdown);
+      showOTPError('Code expiré. Cliquez sur "Renvoyer".');
+      document.getElementById('otp-btn').disabled = true;
+    }
+  }, 1000);
+}
+
+function updateTimer(left) {
+  const sec = left !== undefined ? left : 600;
+  const m = Math.floor(sec / 60), s = sec % 60;
+  const el = document.getElementById('otp-timer');
+  if (!el) return;
+  el.textContent = `${m}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer-badge' + (sec < 60 ? ' expired' : sec < 180 ? ' warn' : '');
+}
+
+function startResendCooldown(seconds) {
+  resendLeft = seconds;
+  const link = document.getElementById('resend-link');
+  const cd   = document.getElementById('resend-countdown');
+  const sec  = document.getElementById('resend-sec');
+  link.style.pointerEvents = 'none'; link.style.color = 'var(--gray-400)';
+  cd.style.display = 'inline';
+  if (resendCooldown) clearInterval(resendCooldown);
+  resendCooldown = setInterval(() => {
+    resendLeft--;
+    sec.textContent = resendLeft;
+    if (resendLeft <= 0) {
+      clearInterval(resendCooldown);
+      link.style.pointerEvents = ''; link.style.color = '';
+      cd.style.display = 'none';
+    }
+  }, 1000);
+}
+
+async function handleResend(e) {
+  e.preventDefault();
+  if (resendLeft > 0) return;
+  try {
+    await apiFetch('/auth/resend-otp', { method: 'POST', body: JSON.stringify({ userId: STATE.userId }) });
+    showToast('✓ Nouveau code envoyé !', 'success');
+    startResendCooldown(60);
+    startOTPTimer(600);
+    document.getElementById('otp-btn').disabled = false;
+    document.getElementById('otp-error').style.display = 'none';
+    // Clear inputs
+    document.querySelectorAll('.otp-box').forEach(i => { i.value = ''; i.classList.remove('filled'); });
+    document.querySelector('.otp-box').focus();
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+function copyOTPCode() {
+  // Code is in email — nothing to copy from UI in production
+  showToast('Consultez vos emails pour le code', 'info');
+}
+
+// ── OTP inputs ──
+function handleOTP(input, idx) {
+  input.value = input.value.replace(/\D/,'');
+  if (input.value) {
+    input.classList.add('filled');
+    const next = document.querySelectorAll('.otp-box')[idx+1];
+    if (next) next.focus();
+  } else {
+    input.classList.remove('filled');
+  }
+  document.getElementById('otp-error').style.display = 'none';
+  const all = [...document.querySelectorAll('.otp-box')];
+  if (all.every(i => i.value)) setTimeout(handleVerifyOTP, 80);
+}
+
+function otpKey(e, idx) {
+  if (e.key === 'Backspace') {
+    const inputs = document.querySelectorAll('.otp-box');
+    if (!inputs[idx].value && idx > 0) inputs[idx-1].focus();
+  }
+  // Support paste
+  if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+    navigator.clipboard.readText().then(t => {
+      const digits = t.replace(/\D/g,'').slice(0,6);
+      if (digits.length === 6) {
+        const boxes = document.querySelectorAll('.otp-box');
+        digits.split('').forEach((d,i) => { boxes[i].value=d; boxes[i].classList.add('filled'); });
+        setTimeout(handleVerifyOTP, 80);
+      }
+    }).catch(()=>{});
+  }
+}
+
+function showOTPError(msg) {
+  const el = document.getElementById('otp-error');
+  el.textContent = msg; el.style.display = 'block';
+  document.querySelectorAll('.otp-box').forEach(i => i.classList.add('error-border'));
+  setTimeout(() => document.querySelectorAll('.otp-box').forEach(i => i.classList.remove('error-border')), 400);
+}
+
+async function handleVerifyOTP() {
+  const code = [...document.querySelectorAll('.otp-box')].map(i => i.value).join('');
+  const btn  = document.getElementById('otp-btn');
+  if (code.length < 6) { showOTPError('Entrez les 6 chiffres.'); return; }
+
+  btn.classList.add('loading'); btn.disabled = true;
+
+  try {
+    const data = await apiFetch('/auth/verify-otp', {
+      method: 'POST',
+      body: JSON.stringify({ userId: STATE.userId, code }),
+    });
+
+    // Store token in memory (sessionStorage as fallback for page reload)
+    sessionStorage.setItem('_rt', data.token);
+    sessionStorage.setItem('_rx', String(Date.now() + data.expiresIn * 1000));
+
+    // Check if has subscription → app, else → plans
+    if (data.user.plan && data.user.plan !== 'free' && data.user.plan_status !== 'inactive') {
+      window.location.href = 'app.html';
+    } else {
+      window.location.href = 'plans.html';
+    }
+
+  } catch (err) {
+    btn.classList.remove('loading'); btn.disabled = false;
+    showOTPError(err.message || 'Code incorrect.');
+  }
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('screen-otp').style.display !== 'none') handleVerifyOTP();
+    else handleLogin();
+  }
+});
+</script>
+</body>
+</html>
