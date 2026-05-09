@@ -222,16 +222,15 @@ function showToast(msg, type) {
   setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},3000);
 }
 
-async function handleCheckout() {
-  const name = document.getElementById('card-name').value.trim();
-  const btn  = document.getElementById('pay-btn');
-  if (!name) { showToast('Entrez le nom sur la carte','error'); return; }
-
+ async function handleCheckout() {
+  const btn = document.getElementById('pay-btn');
   const token = sessionStorage.getItem('_rt');
-  if (!token) { showToast('Session expirée, reconnectez-vous','error'); setTimeout(()=>location.href='login.html',1500); return; }
-
+  if (!token) { 
+    showToast('Session expirée, reconnectez-vous','error'); 
+    setTimeout(()=>location.href='login.html',1500); 
+    return; 
+  }
   btn.classList.add('loading'); btn.disabled = true;
-
   try {
     const res = await fetch(API_BASE + '/stripe/checkout', {
       method: 'POST',
@@ -240,10 +239,7 @@ async function handleCheckout() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Erreur');
-
-    // Redirect to Stripe Checkout
     window.location.href = data.url;
-
   } catch(err) {
     showToast(err.message, 'error');
     btn.classList.remove('loading'); btn.disabled = false;
